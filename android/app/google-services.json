@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "883212268237",
+    "project_id": "userservice-423506",
+    "storage_bucket": "userservice-423506.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883212268237:android:2c46fe158d80424264ef84",
+        "android_client_info": {
+          "package_name": "tech.henskens.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNl1-7aITTiD7PRbcTbwXjSM0AR7hZFfk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
