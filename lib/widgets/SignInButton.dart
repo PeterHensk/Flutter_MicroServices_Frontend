@@ -1,20 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../services/authentication.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../data-access/ApiServices.dart';
+import 'ErrorToast.dart';
 
 class SignInButton extends StatelessWidget {
-  final Authentication auth = Authentication();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      child: Text('Sign in with Google'),
+      child: Text(AppLocalizations.of(context)!.signInWithGoogle),
       onPressed: () async {
-        final userCredential = await auth.signInWithGoogle();
-        if (userCredential != null) {
-          final token = await userCredential.user?.getIdToken();
-          if (token != null) {
-            print('Token: $token');
+        try {
+          UserCredential userCredential = await _auth.signInWithPopup(GoogleAuthProvider());
+          User? user = userCredential.user;
+          if (user != null) {
+            String? token = await user.getIdToken();
+            if (token != null) {
+              final response = await ApiServices.postWhoAmI(token);
+            }
           }
+        } catch (e) {
+          ErrorToast.showError("Error during sign-in: $e");
         }
       },
     );

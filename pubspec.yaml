@@ -9,16 +9,25 @@ environment:
   sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
-  flutter_config: ^2.0.2
-  firebase_core: ^2.31.0
-  flutter_dotenv: ^5.1.0
+  firebase_core: ^2.31.1
+  fluttertoast: ^8.2.5
+
   flutter:
     sdk: flutter
 
+  flutter_localizations:
+    sdk: flutter
+
+  http: ^1.2.1
+
   google_sign_in: ^6.2.1
-  firebase_auth: ^4.19.5
+  google_sign_in_web: ^0.12.4
+  firebase_auth: ^4.19.6
 
   cupertino_icons: ^1.0.8
+  flutter_config: ^2.0.2
+  flutter_dotenv: ^5.1.0
+  intl: any
 
 dev_dependencies:
   mockito: ^5.4.4
@@ -29,6 +38,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - .env
 

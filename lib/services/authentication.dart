@@ -1,27 +1,22 @@
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Authentication {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Future<UserCredential?> signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+    final GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+    googleProvider.setCustomParameters({
+      'client_id': dotenv.env['CLIENT_ID'],
+    });
 
-    return await _auth.signInWithCredential(credential);
+    final UserCredential userCredential = await _firebaseAuth.signInWithPopup(googleProvider);
+
+    return userCredential;
   }
 
   Future<void> signOut() async {
-    await _googleSignIn.signOut();
-    await _auth.signOut();
+    await _firebaseAuth.signOut();
   }
 }

@@ -12,9 +12,6 @@ void main() {
     final mockAuth = MockAuthentication();
     when(mockAuth.authStateChanges).thenAnswer((_) => Stream.value(null));
 
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp(auth: mockAuth));
-
     // Verify that the SignInButton is displayed
     expect(find.byType(SignInButton), findsOneWidget);
   });
@@ -24,8 +21,6 @@ void main() {
     final mockAuth = MockAuthentication();
     when(mockAuth.authStateChanges).thenAnswer((_) => Stream.value(MockUser()));
 
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp(auth: mockAuth));
 
     // Verify that the WelcomePage is displayed
     expect(find.byType(WelcomePage), findsOneWidget);
