@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/NavBar.dart';
 
 class HomePage extends StatelessWidget {
+  final String firstName;
+  final String lastName;
+
+  HomePage({required this.firstName, required this.lastName});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Page'),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                '$firstName $lastName',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
+        ],
       ),
       drawer: NavBar(),
       body: Center(
