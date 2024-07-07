@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/UserManagement.dart';
 import '../screens/SignInPage.dart';
 import '../services/authentication.dart';
 
@@ -16,6 +17,16 @@ class NavBar extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
+          ),
+          ListTile(
+            title: Text('User management'),
+            onTap: () async {
+              await auth.signOut();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => UserManagement())
+              );
+            },
           ),
           ListTile(
             title: Text('Log off'),

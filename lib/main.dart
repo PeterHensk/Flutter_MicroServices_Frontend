@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:frontend/models/Dto/UserDto.dart';
 import 'package:frontend/screens/HomePage.dart';
 import 'package:frontend/screens/SignInPage.dart';
-import 'data-access/ApiServices.dart';
+import 'data-access/services/UserService.dart';
 import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -55,14 +56,14 @@ class MyApp extends StatelessWidget {
                     String? token = snapshot.data;
                     if (token != null) {
                       return FutureBuilder(
-                        future: ApiServices.postWhoAmI(token),
+                        future: UserService.postWhoAmI(token),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.done) {
                             var response = snapshot.data;
-                            var data = jsonDecode(response!.body);
+                            var data = UserDto.fromJson(jsonDecode(response!.body));
                             return HomePage(
-                              firstName: data['firstName'],
-                              lastName: data['lastName'],
+                              firstName: data.firstName,
+                              lastName: data.lastName,
                             );
                           } else {
                             return CircularProgressIndicator();

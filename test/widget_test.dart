@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:frontend/main.dart';
 import 'package:frontend/widgets/SignInButton.dart';
 import 'package:frontend/widgets/WelcomePage.dart';
 import 'package:mockito/mockito.dart';

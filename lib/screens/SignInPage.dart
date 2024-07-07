@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/SignInButton.dart';
-import '../screens/HomePage.dart';
 
 class SignInPage extends StatelessWidget {
   @override
