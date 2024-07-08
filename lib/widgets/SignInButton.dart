@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:frontend/models/Dto/UserDto.dart';
-import '../data-access/services/UserService.dart';
+import '../data-access/services/SessionService.dart';
 import '../screens/HomePage.dart';
 import 'ErrorToast.dart';
 
@@ -24,7 +24,7 @@ class SignInButton extends StatelessWidget {
           if (user != null) {
             String? token = await user.getIdToken();
             if (token != null) {
-              final response = await UserService.postWhoAmI(token);
+              final response = await SessionService.postWhoAmI(token);
               var data = UserDto.fromJson(jsonDecode(response.body));
               Navigator.pushReplacement(
                   context,

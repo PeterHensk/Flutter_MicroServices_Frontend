@@ -6,7 +6,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:frontend/models/Dto/UserDto.dart';
 import 'package:frontend/screens/HomePage.dart';
 import 'package:frontend/screens/SignInPage.dart';
-import 'data-access/services/UserService.dart';
+import 'package:frontend/widgets/ThemeNotifier.dart';
+import 'package:provider/provider.dart';
+import 'data-access/services/SessionService.dart';
 import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,7 +17,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   _initializeApp().then((_) {
-    runApp(MyApp());
+    runApp(
+      ChangeNotifierProvider(
+        create: (_) => ThemeNotifier(),
+        child: MyApp(),
+      ),
+    );
   });
 }
 
@@ -34,13 +41,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return MaterialApp(
       title: 'Flutter App',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: themeNotifier.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       home: StreamBuilder(
         stream: _auth.authStateChanges(),
         builder: (context, snapshot) {
@@ -56,7 +65,7 @@ class MyApp extends StatelessWidget {
                     String? token = snapshot.data;
                     if (token != null) {
                       return FutureBuilder(
-                        future: UserService.postWhoAmI(token),
+                        future: SessionService.postWhoAmI(token),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.done) {
                             var response = snapshot.data;
@@ -66,21 +75,21 @@ class MyApp extends StatelessWidget {
                               lastName: data.lastName,
                             );
                           } else {
-                            return CircularProgressIndicator();
+                            return Center(child: CircularProgressIndicator());
                           }
                         },
                       );
                     } else {
-                      return CircularProgressIndicator();
+                      return Center(child: CircularProgressIndicator());
                     }
                   } else {
-                    return CircularProgressIndicator();
+                    return Center(child: CircularProgressIndicator());
                   }
                 },
               );
             }
           } else {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
         },
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/Dto/GetAllUsersDto.dart';
 import '../data-access/facades/PageResponse.dart';
 import '../data-access/facades/UserFacade.dart';
-import '../data-access/services/UserService.dart';
+import '../data-access/services/SessionService.dart';
 import '../widgets/NavBar.dart';
 import '../widgets/UserManagementList.dart';
 
@@ -12,7 +12,7 @@ class UserManagement extends StatefulWidget {
 }
 
 class _UserManagementState extends State<UserManagement> {
-  final UserFacade _userFacade = UserFacade(UserService());
+  final UserFacade _userFacade = UserFacade(SessionService());
   Future<PageResponse<GetAllUsersDto>>? _futurePageResponse;
   int _currentPage = 0;
   final int _pageSize = 10;

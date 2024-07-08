@@ -5,7 +5,7 @@ import 'package:frontend/models/Dto/GetAllUsersDto.dart';
 import 'package:frontend/models/Dto/UpdateUserDto.dart';
 import 'package:http/http.dart' as http;
 
-class UserService {
+class SessionService {
   static const String _baseUrl = 'http://localhost:8081/user';
 
   static const String whoAmI = '$_baseUrl/whoami';

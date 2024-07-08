@@ -1,9 +1,9 @@
 import '../../models/Dto/GetAllUsersDto.dart';
-import '../services/UserService.dart';
+import '../services/SessionService.dart';
 import 'PageResponse.dart';
 
 class UserFacade {
-  final UserService _userService;
+  final SessionService _userService;
 
   UserFacade(this._userService);
 

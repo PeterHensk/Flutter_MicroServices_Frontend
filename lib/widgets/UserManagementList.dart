@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/widgets/EditableCell.dart';
 import '../../models/Dto/GetAllUsersDto.dart';
 import '../data-access/facades/PageResponse.dart';
-import '../data-access/services/UserService.dart';
+import '../data-access/services/SessionService.dart';
 import '../models/Dto/UpdateUserDto.dart';
 import '../screens/UserDetailPage.dart';
 
@@ -30,7 +30,7 @@ class UserManagementList extends StatefulWidget {
 }
 
 class _UserManagementListState extends State<UserManagementList> {
-  final _userService = UserService();
+  final _userService = SessionService();
   Future<PageResponse<GetAllUsersDto>>? futurePageResponse;
 
   @override
