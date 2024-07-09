@@ -6,7 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:frontend/models/Dto/UserDto.dart';
 import 'package:frontend/screens/HomePage.dart';
 import 'package:frontend/screens/SignInPage.dart';
-import 'package:frontend/widgets/ThemeNotifier.dart';
+import 'package:frontend/widgets/general/ThemeNotifier.dart';
 import 'package:provider/provider.dart';
 import 'data-access/services/SessionService.dart';
 import 'firebase_options.dart';

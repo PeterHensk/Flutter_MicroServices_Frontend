@@ -3,8 +3,10 @@ import '../../models/Dto/GetAllStationsDto.dart';
 import '../data-access/facades/PageResponse.dart';
 import '../data-access/facades/StationFacade.dart';
 import '../data-access/services/StationService.dart';
-import '../widgets/NavBar.dart';
-import '../widgets/StationTile.dart';
+import '../widgets/general/NavBar.dart';
+import '../widgets/general/PaginationWidget.dart';
+import '../widgets/station/StationTile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StationManagement extends StatefulWidget {
   @override
@@ -49,50 +51,62 @@ class _StationManagementState extends State<StationManagement> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Station Management'),
+        title: Text(AppLocalizations.of(context)!.station_screen_title),
       ),
       drawer: NavBar(),
-      body: FutureBuilder<PageResponse<GetAllStationsDto>>(
-        future: _futurePageResponse,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            final pageResponse = snapshot.data!;
-            final stations = pageResponse.content;
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text((AppLocalizations.of(context)!.station_screen_intro),
+              style: const TextStyle(fontSize: 16.0),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<PageResponse<GetAllStationsDto>>(
+              future: _futurePageResponse,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  final pageResponse = snapshot.data!;
+                  final stations = pageResponse.content;
 
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: stations.length,
-                    itemBuilder: (context, index) {
-                      return StationTile(station: stations[index]);
-                    },
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: _previousPage,
-                      child: Text('Previous'),
-                    ),
-                    Text('Page ${_currentPage + 1}'),
-                    TextButton(
-                      onPressed: pageResponse.pageNumber < pageResponse.totalPages - 1 ? _nextPage : null,
-                      child: Text('Next'),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          } else {
-            return Center(child: Text('No data available.'));
-          }
-        },
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: stations.length,
+                          itemBuilder: (context, index) {
+                            return StationTile(station: stations[index]);
+                          },
+                        ),
+                      ),
+                      PaginationWidget(
+                        currentPage: _currentPage,
+                        totalPages: pageResponse.totalPages,
+                        onNextPage: _nextPage,
+                        onPreviousPage: _previousPage,
+                      ),
+                    ],
+                  );
+                } else {
+                  return const Center(child: Text('No data available.'));
+                }
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text((AppLocalizations.of(context)!.station_screen_bottom),
+              style: const TextStyle(fontSize: 16.0),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ),
     );
   }

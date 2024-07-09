@@ -3,8 +3,8 @@ import '../../models/Dto/GetAllUsersDto.dart';
 import '../data-access/facades/PageResponse.dart';
 import '../data-access/facades/UserFacade.dart';
 import '../data-access/services/SessionService.dart';
-import '../widgets/NavBar.dart';
-import '../widgets/UserManagementList.dart';
+import '../widgets/general/NavBar.dart';
+import '../widgets/session/UserManagementList.dart';
 
 class UserManagement extends StatefulWidget {
   @override

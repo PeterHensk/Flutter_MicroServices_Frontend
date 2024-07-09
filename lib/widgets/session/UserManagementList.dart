@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/EditableCell.dart';
-import '../../models/Dto/GetAllUsersDto.dart';
-import '../data-access/facades/PageResponse.dart';
-import '../data-access/services/SessionService.dart';
-import '../models/Dto/UpdateUserDto.dart';
-import '../screens/UserDetailPage.dart';
+import '../../../models/Dto/GetAllUsersDto.dart';
+import '../../data-access/facades/PageResponse.dart';
+import '../../data-access/services/SessionService.dart';
+import '../general/PaginationWidget.dart';
+import '../general/EditableCell.dart';
 
 class UserManagementList extends StatefulWidget {
   Future<PageResponse<GetAllUsersDto>>? futurePageResponse;
@@ -32,6 +31,8 @@ class UserManagementList extends StatefulWidget {
 class _UserManagementListState extends State<UserManagementList> {
   final _userService = SessionService();
   Future<PageResponse<GetAllUsersDto>>? futurePageResponse;
+  int _currentPage = 0;
+  final int _pageSize = 10;
 
   @override
   void initState() {
@@ -40,26 +41,28 @@ class _UserManagementListState extends State<UserManagementList> {
         _userService.getAllUsers(widget.currentPage, widget.totalElements);
   }
 
-  Future<void> _updateUser(UpdateUserDto user, String field, String value) {
-    UpdateUserDto updatedUser = UpdateUserDto(
-      id: user.id,
-      email: field == 'email' ? value : user.email,
-      firstName: field == 'firstName' ? value : user.firstName,
-      lastName: field == 'lastName' ? value : user.lastName,
-      role: field == 'role' ? value : user.role,
-      updated: DateTime.now(),
-    );
-    return _userService.updateUser(user.id, updatedUser).then((_) {
-      _reloadData();
-    });
-  }
-
   void _reloadData() {
     setState(() {
       futurePageResponse = _userService.getAllUsers(
           widget.currentPage,
           widget.totalElements);
     });
+  }
+
+  void _nextPage() {
+    setState(() {
+      _currentPage++;
+      _reloadData();
+    });
+  }
+
+  void _previousPage() {
+    if (_currentPage > 0) {
+      setState(() {
+        _currentPage--;
+        _reloadData();
+      });
+    }
   }
 
   @override
@@ -120,54 +123,23 @@ class _UserManagementListState extends State<UserManagementList> {
                   }).toList(),
                 ),
               ),
+              PaginationWidget(
+                currentPage: _currentPage,
+                totalPages: pageResponse.totalPages,
+                onNextPage: _nextPage,
+                onPreviousPage: _previousPage,
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.arrow_back),
-                              onPressed: widget.currentPage > 0
-                                  ? () => widget.onPreviousPage()
-                                  : null,
-                              tooltip: 'Previous Page',
-                            ),
-                            Text(
-                                'Page ${widget.pageNumber + 1} of ${pageResponse.totalPages}'),
-                            IconButton(
-                              icon: Icon(Icons.arrow_forward),
-                              onPressed: widget.currentPage <
-                                      pageResponse.totalPages - 1
-                                  ? () => widget.onNextPage()
-                                  : null,
-                              tooltip: 'Next Page',
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            'Total Records: ${pageResponse.totalElements}'),
-                      ),
-                    ),
-                  ],
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text('Total Records: ${pageResponse.totalElements}'),
                 ),
               ),
             ],
           );
         } else {
-          return Center(child: Text('No users found'));
+          return const Center(child: Text('No users found'));
         }
       },
     );

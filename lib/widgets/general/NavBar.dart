@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/UserManagement.dart';
 import 'package:provider/provider.dart';
-import '../screens/SignInPage.dart';
-import '../screens/StationManagement.dart';
-import '../services/authentication.dart';
+import '../../screens/SignInPage.dart';
+import '../../screens/StationManagement.dart';
+import '../../services/authentication.dart';
 import 'ThemeNotifier.dart';
 
 class NavBar extends StatelessWidget {

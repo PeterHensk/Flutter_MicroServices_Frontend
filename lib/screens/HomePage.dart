@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/NavBar.dart';
+import '../widgets/general/NavBar.dart';
 
 class HomePage extends StatelessWidget {
   final String firstName;

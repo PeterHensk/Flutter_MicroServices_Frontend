@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:frontend/widgets/SignInButton.dart';
+import 'package:frontend/widgets/general/SignInButton.dart';
 import 'package:frontend/widgets/WelcomePage.dart';
 import 'package:mockito/mockito.dart';
 import 'authentication_mock.dart';
