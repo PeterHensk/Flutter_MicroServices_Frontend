@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/SessionPage.dart';
 import 'package:frontend/screens/UserManagement.dart';
 import 'package:provider/provider.dart';
 import '../../screens/SignInPage.dart';
@@ -17,14 +18,14 @@ class NavBar extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
-            child: Text('Navigation'),
+          const DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
+            child: Text('Navigation'),
           ),
           ListTile(
-            title: Text('User management'),
+            title: const Text('User management'),
             onTap: () async {
               await auth.signOut();
               Navigator.pushReplacement(
@@ -34,7 +35,7 @@ class NavBar extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Station management'),
+            title: const Text('Station management'),
             onTap: () async {
               await auth.signOut();
               Navigator.pushReplacement(
@@ -44,7 +45,17 @@ class NavBar extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Log off'),
+            title: const Text('Session details'),
+            onTap: () async {
+              await auth.signOut();
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => SessionPage())
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Log off'),
             onTap: () async {
               await auth.signOut();
               Navigator.pushReplacement(
@@ -54,7 +65,7 @@ class NavBar extends StatelessWidget {
             },
           ),
           SwitchListTile(
-            title: Text('Dark Mode'),
+            title: const Text('Dark Mode'),
             value: themeNotifier.isDarkMode,
             onChanged: (value) {
               themeNotifier.toggleTheme();

@@ -5,10 +5,12 @@ import 'package:frontend/models/Dto/GetAllUsersDto.dart';
 import 'package:frontend/models/Dto/UpdateUserDto.dart';
 import 'package:http/http.dart' as http;
 
-class SessionService {
-  static const String _baseUrl = 'http://localhost:8081/user';
+import '../../models/Dto/GetAllSessionsDto.dart';
 
-  static const String whoAmI = '$_baseUrl/whoami';
+class SessionService {
+  static const String _baseUrl = 'http://localhost:8081';
+
+  static const String whoAmI = '$_baseUrl/user/whoami';
 
   static Future<http.Response> postWhoAmI(String token) {
     return http.post(
@@ -22,7 +24,7 @@ class SessionService {
 
   Future<PageResponse<GetAllUsersDto>> getAllUsers(int page, int size) async {
     final response = await http.get(
-      Uri.parse('$_baseUrl?page=$page&size=$size'),
+      Uri.parse('$_baseUrl/user?page=$page&size=$size'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -41,7 +43,7 @@ class SessionService {
     Map<String, dynamic> userMap = user.toJson();
     String userJson = jsonEncode(userMap);
     return http.put(
-      Uri.parse('$_baseUrl/$id'),
+      Uri.parse('$_baseUrl/user/$id'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -59,5 +61,22 @@ class SessionService {
       updated: DateTime.now(),
     );
     return updateUser(updatedUser.id, updatedUser);
+  }
+
+  Future<PageResponse<GetAllSessionsDto>> getAllSessions(int page, int size) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/session?page=$page&size=$size'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+    if (response.statusCode == 200) {
+      return PageResponse<GetAllSessionsDto>.fromJson(
+          jsonDecode(response.body),
+              (item) => GetAllSessionsDto.fromJson(item)
+      );
+    } else {
+      throw Exception('Failed to load sessions');
+    }
   }
 }
