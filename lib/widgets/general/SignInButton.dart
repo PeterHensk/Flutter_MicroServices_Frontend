@@ -4,12 +4,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:frontend/models/Dto/UserDto.dart';
+import '../../data-access/facades/SessionFacade.dart';
 import '../../data-access/services/SessionService.dart';
 import '../../screens/HomePage.dart';
 import 'ErrorToast.dart';
 
 class SignInButton extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final SessionFacade sessionFacade;
+
+  SignInButton({super.key, required this.sessionFacade});
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +35,14 @@ class SignInButton extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => HomePage(
                       firstName: data.firstName,
-                      lastName: data.lastName
+                      lastName: data.lastName,
+                      sessionFacade: sessionFacade,
                     ),
                   ));
             }
           }
         } catch (e) {
-          ErrorToast.showError("Error during sign-in: $e");
+          ErrorToast(message: "Error during sign-in: $e").show(context);
         }
       },
     );

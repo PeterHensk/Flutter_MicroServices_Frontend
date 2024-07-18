@@ -4,5 +4,6 @@
   "station_screen_intro": "Welcome to the Station Management Screen.\nHere you can manage all the stations available in the system.\nYou can view detailed information about each station, including its location and the number of charging ports.\nUse the navigation buttons to browse through the list of stations.\nClick on a station tile to view more details or to manage the station.",
   "station_screen_bottom": "This is the end of the Station Management Screen.\nRemember to regularly check for updates and new stations.\nFor any issues or inquiries, contact support.\nThank you for using the Station Management System.",
   "session_screen_intro": "Welcome to the Charging Log Sessions page!\nHere, you can explore detailed records of various charging sessions, providing insights into the start and end times, as well as car details and energy consumption.\nWhether you're tracking your electric vehicle's charging history or analyzing usage patterns, our logs offer comprehensive data to help you stay informed.\nEach entry includes information about the car ID, user ID, station identifier, port identifier, kilowatt-hours consumed, and precise timestamps for when the charging started and ended.\nDive in to understand more about your EV charging activities and optimize your energy usage.",
-  "session_screen_title": "Charging session logs"
+  "session_screen_title": "Charging session logs",
+  "create_session_tooltip": "Create a new charging session"
 }

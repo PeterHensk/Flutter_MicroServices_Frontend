@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/Dto/GetAllStationsDto.dart';
 import '../data-access/facades/PageResponse.dart';
+import '../data-access/facades/SessionFacade.dart';
 import '../data-access/facades/StationFacade.dart';
 import '../data-access/services/StationService.dart';
 import '../widgets/general/NavBar.dart';
@@ -9,8 +10,14 @@ import '../widgets/station/StationTile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StationManagement extends StatefulWidget {
+  final SessionFacade sessionFacade;
+
+  const StationManagement({super.key, required this.sessionFacade});
+
   @override
-  _StationManagementState createState() => _StationManagementState();
+  _StationManagementState createState() {
+    return _StationManagementState();
+  }
 }
 
 class _StationManagementState extends State<StationManagement> {
@@ -53,7 +60,7 @@ class _StationManagementState extends State<StationManagement> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.station_screen_title),
       ),
-      drawer: NavBar(),
+      drawer: NavBar(sessionFacade: widget.sessionFacade,),
       body: Column(
         children: [
           Padding(

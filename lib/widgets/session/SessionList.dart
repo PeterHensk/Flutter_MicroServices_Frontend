@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../data-access/facades/SessionFacade.dart';
 import '../../data-access/services/SessionService.dart';
 import '../../models/Dto/GetAllSessionsDto.dart';
 import '../../data-access/facades/PageResponse.dart';
+import '../general/ConfirmDeleteDialog.dart';
+import '../general/HoverMenuWidget.dart';
 import '../general/PaginationWidget.dart';
 
 class SessionList extends StatefulWidget {
@@ -11,11 +14,11 @@ class SessionList extends StatefulWidget {
 }
 
 class _SessionListState extends State<SessionList> {
-  final SessionService _sessionService = SessionService();
+  final SessionFacade _sessionFacade = SessionFacade(SessionService());
   Future<PageResponse<GetAllSessionsDto>>? _futureSessions;
   int _currentPage = 0;
   int _totalPages = 0;
-  final int _pageSize = 10;
+  final int _pageSize = 6;
 
   @override
   void initState() {
@@ -25,7 +28,7 @@ class _SessionListState extends State<SessionList> {
 
   void _loadSessions() async {
     setState(() {
-      _futureSessions = _sessionService.getAllSessions(_currentPage, _pageSize);
+      _futureSessions = _sessionFacade.getAllSessions(_currentPage, _pageSize);
     });
     _futureSessions!.then((pageResponse) {
       setState(() {
@@ -34,9 +37,19 @@ class _SessionListState extends State<SessionList> {
     });
   }
 
-  void _deleteSession(int sessionId) {
-    print("Deleting session with ID: $sessionId");
+  void _deleteSession(int sessionId) async {
+    try {
+      await _sessionFacade.deleteSession(sessionId);
+      print("Session with ID: $sessionId deleted successfully");
+    } catch (e) {
+      print("Failed to delete session with ID: $sessionId. Error: $e");
+    }
     _loadSessions();
+  }
+
+  void _editSession(int sessionId) {
+    print("Editing session with ID: $sessionId");
+    // Add your edit session logic here
   }
 
   void _nextPage() {
@@ -68,44 +81,70 @@ class _SessionListState extends State<SessionList> {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData) {
           final sessions = snapshot.data!.content;
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: sessions.length,
-                  itemBuilder: (context, index) {
-                    final session = sessions[index];
-                    final dateFormat = DateFormat('yyyy-MM-dd HH:mm');
-                    final startedFormatted = dateFormat.format(DateTime.parse(session.started));
-                    final endedFormatted = dateFormat.format(DateTime.parse(session.ended));
+          return Center(
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: sessions.length,
+                    itemBuilder: (context, index) {
+                      final session = sessions[index];
+                      final dateFormat = DateFormat('yyyy-MM-dd HH:mm');
+                      final startedFormatted = dateFormat.format(DateTime.parse(session.started));
+                      final endedFormatted = dateFormat.format(DateTime.parse(session.ended));
 
-                    return ListTile(
-                      title: Text('${session.stationIdentifier}'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('$startedFormatted\n$endedFormatted'),
-                          Text('${session.car.licensePlate} - ${session.car.brand}'),
-                          Text('kWh charged: ${session.kwh.toStringAsFixed(2)}'),
-                        ],
-                      ),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          _deleteSession(session.id);
-                        },
-                      ),
-                    );
-                  },
+                      return Center( // Center the ListTile
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.8, // Set a fixed width for centering
+                          child: ListTile(
+                            title: Center(child: Text(session.stationIdentifier)),
+                            subtitle: HoverMenuWidget(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: DefaultTextStyle.of(context).style,
+                                        children: <TextSpan>[
+                                          const TextSpan(text: 'Start: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                          TextSpan(text: '$startedFormatted '),
+                                          const TextSpan(text: 'Stop: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                          TextSpan(text: endedFormatted),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Center(child: Text('${session.car.licensePlate} - ${session.car.brand}')),
+                                  Center(child: Text('kWh charged: ${session.kwh.toStringAsFixed(2)}')),
+                                ],
+                              ),
+                              onEdit: () => _editSession(session.id),
+                                onDelete: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return ConfirmDeleteDialog(
+                                        onConfirm: () => _deleteSession(session.id),
+                                      );
+                                    },
+                                  );
+                                },
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              PaginationWidget(
-                currentPage: _currentPage,
-                totalPages: _totalPages,
-                onNextPage: _nextPage,
-                onPreviousPage: _previousPage,
-              ),
-            ],
+                PaginationWidget(
+                  currentPage: _currentPage,
+                  totalPages: _totalPages,
+                  onNextPage: _nextPage,
+                  onPreviousPage: _previousPage,
+                ),
+              ],
+            ),
           );
         } else {
           return Center(child: Text('No sessions found'));

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/Dto/GetAllStationsDto.dart';
+import '../general/CreateButtonWidget.dart';
 
 class StationDetails extends StatelessWidget {
   final GetAllStationsDto station;
@@ -59,37 +60,49 @@ class StationDetails extends StatelessWidget {
               constraints: BoxConstraints(maxWidth: 400), // Adjust maxWidth as needed
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: station.chargingPorts.map((port) => Container(
-                  margin: const EdgeInsets.symmetric(vertical: 4),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: brightness == Brightness.dark ? Colors.grey[700] : Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 4,
-                        offset: Offset(0, 2),
+                children: station.chargingPorts.map((port) {
+                  return Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 4),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: brightness == Brightness.dark ? Colors.grey[700] : Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            'Port Identifier: ${port.portIdentifier}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Status: ${port.status}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).textTheme.headlineSmall?.color ?? Colors.black54,
+                            ),
+                          ),
+                          trailing: port.status == "AVAILABLE"
+                              ? CreateButtonWidget(
+                            stationIdentifier: station.stationIdentifier,
+                            portIdentifier: port.portIdentifier,
+                          )
+                              : null,
+                        ),
                       ),
                     ],
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      'Port Identifier: ${port.portIdentifier}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Status: ${port.status}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).textTheme.headlineSmall?.color ?? Colors.black54,
-                      ),
-                    ),
-                  ),
-                )).toList(),
+                  );
+                }).toList(),
               ),
             ),
           ),

@@ -6,6 +6,8 @@ import 'package:frontend/models/Dto/UpdateUserDto.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/Dto/GetAllSessionsDto.dart';
+import '../../models/Dto/RunningSessionDto.dart';
+import '../../models/Dto/StartSessionDto.dart';
 
 class SessionService {
   static const String _baseUrl = 'http://localhost:8081';
@@ -79,4 +81,48 @@ class SessionService {
       throw Exception('Failed to load sessions');
     }
   }
+
+  Future<http.Response> deleteSession(int sessionId) async {
+    final url = Uri.parse('$_baseUrl/session/$sessionId');
+    final response = await http.delete(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+    return response;
+  }
+
+  Future<http.Response> startSession(String token, StartSessionDto sessionDto) async {
+    final url = Uri.parse('$_baseUrl/session/start');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(sessionDto.toJson()),
+    );
+    return response;
+  }
+
+  Future<RunningSessionDto?> getRunningSession(String token) async {
+    final url = Uri.parse('$_baseUrl/session/running');
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return RunningSessionDto.fromJson(jsonDecode(response.body));
+    } else if (response.statusCode == 204) {
+      return null;
+    } else {
+      throw Exception('Failed to load running session');
+    }
+  }
+
 }

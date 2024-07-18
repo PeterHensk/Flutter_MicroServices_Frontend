@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import '../data-access/facades/SessionFacade.dart';
 import '../widgets/general/SignInButton.dart';
 
 class SignInPage extends StatelessWidget {
+  final SessionFacade sessionFacade;
+
+  const SignInPage({super.key, required this.sessionFacade});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,17 +16,17 @@ class SignInPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               'Welcome!',
               style: TextStyle(fontSize: 24),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Please sign in to continue.',
               style: TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 20),
-            SignInButton(),
+            const SizedBox(height: 20),
+            SignInButton(sessionFacade: sessionFacade,),
           ],
         ),
       ),

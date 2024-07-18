@@ -1,10 +1,7 @@
+import 'chargingPort.dart';
+import 'location.dart';
 
-
-import '../chargingPort.dart';
-import '../location.dart';
-import '../station.dart';
-
-class GetAllStationsDto {
+class Station {
   final String stationIdentifier;
   final Location location;
   final List<ChargingPort> chargingPorts;
@@ -12,7 +9,7 @@ class GetAllStationsDto {
   final dynamic image;
   final dynamic contentType;
 
-  GetAllStationsDto({
+  Station({
     required this.stationIdentifier,
     required this.location,
     required this.chargingPorts,
@@ -21,11 +18,11 @@ class GetAllStationsDto {
     this.contentType,
   });
 
-  factory GetAllStationsDto.fromJson(Map<String, dynamic> json) {
+  factory Station.fromJson(Map<String, dynamic> json) {
     var portsList = json['chargingPorts'] as List;
     List<ChargingPort> chargingPortsList = portsList.map((i) => ChargingPort.fromJson(i)).toList();
 
-    return GetAllStationsDto(
+    return Station(
       stationIdentifier: json['stationIdentifier'],
       location: Location.fromJson(json['location']),
       chargingPorts: chargingPortsList,
@@ -45,16 +42,4 @@ class GetAllStationsDto {
       'contentType': contentType,
     };
   }
-
-  Station toStation() {
-    return Station(
-      stationIdentifier: stationIdentifier,
-      location: location,
-      chargingPorts: chargingPorts,
-      imageId: imageId,
-      image: image,
-      contentType: contentType,
-    );
-  }
 }
-

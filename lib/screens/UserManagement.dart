@@ -7,6 +7,9 @@ import '../widgets/general/NavBar.dart';
 import '../widgets/session/UserManagementList.dart';
 
 class UserManagement extends StatefulWidget {
+  final SessionFacade sessionFacade;
+
+  const UserManagement({super.key, required this.sessionFacade});
   @override
   _UserManagementState createState() => _UserManagementState();
 }
@@ -61,7 +64,7 @@ class _UserManagementState extends State<UserManagement> {
       appBar: AppBar(
         title: Text('User Management'),
       ),
-      drawer: NavBar(),
+      drawer: NavBar(sessionFacade: widget.sessionFacade,),
       body: UserManagementList(
         futurePageResponse: _futurePageResponse,
         currentPage: _currentPage,
