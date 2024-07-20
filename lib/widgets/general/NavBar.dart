@@ -20,6 +20,8 @@ class NavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     final token = themeNotifier.token ?? "";
+    final firstName = themeNotifier.firstName ?? "";
+    final lastName = themeNotifier.lastName ?? "";
 
     return Drawer(
       child: ListView(
@@ -42,7 +44,7 @@ class NavBar extends StatelessWidget {
             title: const Text('Station management'),
             onTap: () async {
               await auth.signOut();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StationManagement(sessionFacade: sessionFacade)));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StationManagement(token: token, sessionFacade: sessionFacade)));
             },
           ),
           ListTile(
@@ -67,14 +69,18 @@ class NavBar extends StatelessWidget {
             },
           ),
           FutureBuilder<RunningSessionDto?>(
-            future: sessionFacade.getRunningSession(token), // Use the token from ThemeNotifier
+            future: sessionFacade.getRunningSession(token),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const ListTile(title: Text('Loading session...'));
               } else if (snapshot.hasError) {
                 return const ListTile(title: Text('Error fetching session'));
               } else {
-                return RunningSession(session: snapshot.data);
+                return RunningSession(session: snapshot.data,
+                                      sessionFacade: sessionFacade,
+                                      token: token,
+                                      firstName: firstName,
+                                      lastName: lastName,);
               }
             },
           ),

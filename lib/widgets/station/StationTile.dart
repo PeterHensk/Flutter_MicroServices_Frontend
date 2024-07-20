@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../../models/Dto/GetAllStationsDto.dart';
+import '../../data-access/facades/SessionFacade.dart';
 import '../../screens/StationDetailPage.dart';
 
 class StationTile extends StatelessWidget {
   final GetAllStationsDto station;
+  final String token;
+  final SessionFacade sessionFacade;
 
-  const StationTile({Key? key, required this.station}) : super(key: key);
+  const StationTile({Key? key, required this.station,
+                               required this.token,
+                               required this.sessionFacade}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class StationTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => StationDetailPage(station: station),
+            builder: (context) => StationDetailPage(station: station, token: token, sessionFacade: sessionFacade),
           ),
         );
       },

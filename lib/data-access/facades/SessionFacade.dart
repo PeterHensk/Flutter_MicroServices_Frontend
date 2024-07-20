@@ -1,3 +1,6 @@
+import 'package:http/http.dart';
+
+import '../../models/Dto/CreateCarDto.dart';
 import '../../models/Dto/GetAllSessionsDto.dart';
 import '../../models/Dto/GetAllUsersDto.dart';
 import '../../models/Dto/RunningSessionDto.dart';
@@ -10,18 +13,22 @@ class SessionFacade {
 
   SessionFacade(this._sessionService);
 
-  Future<PageResponse<GetAllUsersDto>> getAllUsers(int pageIndex, int pageSize) async {
+  Future<PageResponse<GetAllUsersDto>> getAllUsers(
+      int pageIndex, int pageSize) async {
     try {
-      final PageResponse<GetAllUsersDto> response = await _sessionService.getAllUsers(pageIndex, pageSize);
+      final PageResponse<GetAllUsersDto> response =
+          await _sessionService.getAllUsers(pageIndex, pageSize);
       return response;
     } catch (error) {
       throw Exception('Failed to fetch users: $error');
     }
   }
 
-  Future<PageResponse<GetAllSessionsDto>> getAllSessions(int pageIndex, int pageSize) async {
+  Future<PageResponse<GetAllSessionsDto>> getAllSessions(
+      int pageIndex, int pageSize) async {
     try {
-      final PageResponse<GetAllSessionsDto> response = await _sessionService.getAllSessions(pageIndex, pageSize);
+      final PageResponse<GetAllSessionsDto> response =
+          await _sessionService.getAllSessions(pageIndex, pageSize);
       return response;
     } catch (error) {
       throw Exception('Failed to fetch sessions: $error');
@@ -35,23 +42,34 @@ class SessionFacade {
     }
   }
 
-  Future<void> startSession(String token, StartSessionDto sessionDto) async {
-    try {
-      final response = await _sessionService.startSession(token, sessionDto);
-      if (response.statusCode != 201) {
-        throw Exception('Failed to start session');
-      }
-    } catch (error) {
-      throw Exception('Failed to start session: $error');
+  Future<Response> startSession(String token, StartSessionDto sessionDto) async {
+    final response = await _sessionService.startSession(token, sessionDto);
+    if (response.statusCode == 201 || response.statusCode == 404) {
+      return response;
+    } else {
+      throw Exception('Failed to start session with status code: ${response.statusCode}');
     }
   }
 
   Future<RunningSessionDto?> getRunningSession(String token) async {
     try {
-      final RunningSessionDto? session = await _sessionService.getRunningSession(token);
+      final RunningSessionDto? session =
+          await _sessionService.getRunningSession(token);
       return session;
     } catch (error) {
       throw Exception('Failed to fetch running session: $error');
     }
+  }
+
+  Future<void> stopSession(String token, int sessionId) async {
+    try {
+      await _sessionService.stopSession(token, sessionId);
+    } catch (error) {
+      throw Exception('Failed to stop session: $error');
+    }
+  }
+
+  Future<Response> createCar(String token, CreateCarDto carDto) async {
+    return await _sessionService.createCar(token, carDto);
   }
 }

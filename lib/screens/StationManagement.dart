@@ -11,8 +11,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StationManagement extends StatefulWidget {
   final SessionFacade sessionFacade;
+  final String token;
 
-  const StationManagement({super.key, required this.sessionFacade});
+  const StationManagement({super.key,
+                           required this.sessionFacade,
+                           required this.token});
 
   @override
   _StationManagementState createState() {
@@ -34,7 +37,7 @@ class _StationManagementState extends State<StationManagement> {
 
   void _loadStations() {
     setState(() {
-      _futurePageResponse = _stationFacade.getAllStations(_currentPage, _pageSize);
+      _futurePageResponse = _stationFacade.getAllStations(widget.token, _currentPage, _pageSize);
     });
   }
 
@@ -88,7 +91,7 @@ class _StationManagementState extends State<StationManagement> {
                         child: ListView.builder(
                           itemCount: stations.length,
                           itemBuilder: (context, index) {
-                            return StationTile(station: stations[index]);
+                            return StationTile(station: stations[index], token: widget.token, sessionFacade: widget.sessionFacade);
                           },
                         ),
                       ),

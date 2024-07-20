@@ -7,9 +7,9 @@ class StationFacade {
 
   StationFacade(this._stationService);
 
-  Future<PageResponse<GetAllStationsDto>> getAllStations(int pageIndex, int pageSize) async {
+  Future<PageResponse<GetAllStationsDto>> getAllStations(String token, int pageIndex, int pageSize) async {
     try {
-      final PageResponse<GetAllStationsDto> response = await _stationService.getAllStations(pageIndex, pageSize);
+      final PageResponse<GetAllStationsDto> response = await _stationService.getAllStations(token, pageIndex, pageSize);
       return response;
     } catch (error) {
       throw Exception('Failed to fetch stations: $error');

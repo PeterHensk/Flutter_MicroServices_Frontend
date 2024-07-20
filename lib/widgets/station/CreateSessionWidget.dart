@@ -3,12 +3,18 @@ import 'package:frontend/widgets/general/ThemeNotifier.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/data-access/facades/SessionFacade.dart';
 import 'package:frontend/models/Dto/StartSessionDto.dart';
+import 'package:frontend/widgets/session/CreateCarDialog.dart';
 
-class CreateButtonWidget extends StatelessWidget {
+class CreateSessionWidget extends StatelessWidget {
   final String stationIdentifier;
   final String portIdentifier;
+  final VoidCallback onSessionCreated;
 
-  CreateButtonWidget({required this.stationIdentifier, required this.portIdentifier});
+  const CreateSessionWidget(
+      {super.key,
+      required this.stationIdentifier,
+      required this.portIdentifier,
+        required this.onSessionCreated,});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +29,8 @@ class CreateButtonWidget extends StatelessWidget {
   void _showDialog(BuildContext context) {
     final sessionFacade = Provider.of<SessionFacade>(context, listen: false);
     final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
-    final TextEditingController licensePlateController = TextEditingController();
+    final TextEditingController licensePlateController =
+        TextEditingController();
 
     showDialog(
       context: context,
@@ -33,11 +40,9 @@ class CreateButtonWidget extends StatelessWidget {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Station Identifier: $stationIdentifier'),
-              Text('Port Identifier: $portIdentifier'),
               TextField(
                 controller: licensePlateController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Enter your license plate',
                 ),
               ),
@@ -63,35 +68,46 @@ class CreateButtonWidget extends StatelessWidget {
                       portIdentifier: portIdentifier,
                     );
 
-                    try {
-                      // Attempt to start the session
-                      await sessionFacade.startSession(token, sessionDto);
-                      Navigator.of(context).pop(); // Close the dialog
+                    final response = await sessionFacade.startSession(token, sessionDto);
+                    if (response.statusCode == 201) {
+                      Navigator.of(context).pop();
+                      onSessionCreated();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Session started successfully!')),
+                        const SnackBar(content: Text('Session started successfully!')),
                       );
-                    } catch (error) {
-                      // Log detailed error information
-                      print('Error starting session: $error');
-                      Navigator.of(context).pop(); // Close the dialog first
+                    } else if (response.statusCode == 404) {
+                      Navigator.of(context).pop();
+                      _showCreateCarDialog(context, token, licensePlate, sessionDto);
+                    } else {
+                      print('Error starting session: ${response.body}');
+                      Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to start session: ${error.toString()}')),
+                        SnackBar(content: Text('Failed to start session: ${response.body}')),
                       );
                     }
-                  } else {
-                    Navigator.of(context).pop(); // Close the dialog
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Authentication token is missing')),
-                    );
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('License plate cannot be empty')),
+                    const SnackBar(content: Text('License plate cannot be empty')),
                   );
                 }
               },
             ),
           ],
+        );
+      },
+    );
+  }
+
+  void _showCreateCarDialog(BuildContext context, String token,
+      String licensePlate, StartSessionDto sessionDto) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CreateCarDialog(
+          token: token,
+          licensePlate: licensePlate,
+          sessionDto: sessionDto,
         );
       },
     );

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import '../../data-access/facades/SessionFacade.dart';
 import '../../models/Dto/GetAllStationsDto.dart';
-import '../general/CreateButtonWidget.dart';
+import '../../screens/StationManagement.dart';
+import 'CreateSessionWidget.dart';
 
 class StationDetails extends StatelessWidget {
   final GetAllStationsDto station;
+  final String token;
+  final SessionFacade sessionFacade;
 
-  const StationDetails({super.key, required this.station});
+  const StationDetails({super.key, required this.station,
+                                   required this.token,
+                                   required this.sessionFacade});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +27,8 @@ class StationDetails extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).textTheme.headlineLarge?.color ?? Colors.black,
+              color: Theme.of(context).textTheme.headlineLarge?.color ??
+                  Colors.black,
             ),
             textAlign: TextAlign.center,
           ),
@@ -30,7 +37,8 @@ class StationDetails extends StatelessWidget {
             'Address: ${station.location.addressLine1}, ${station.location.postalCode}',
             style: TextStyle(
               fontSize: 16,
-              color: Theme.of(context).textTheme.headlineMedium?.color ?? Colors.black54,
+              color: Theme.of(context).textTheme.headlineMedium?.color ??
+                  Colors.black54,
             ),
             textAlign: TextAlign.center,
           ),
@@ -39,7 +47,8 @@ class StationDetails extends StatelessWidget {
             'Parking: ${station.location.parkingName}',
             style: TextStyle(
               fontSize: 16,
-              color: Theme.of(context).textTheme.headlineMedium?.color ?? Colors.black54,
+              color: Theme.of(context).textTheme.headlineMedium?.color ??
+                  Colors.black54,
             ),
             textAlign: TextAlign.center,
           ),
@@ -49,7 +58,8 @@ class StationDetails extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).textTheme.headlineSmall?.color ?? Colors.black,
+              color: Theme.of(context).textTheme.headlineSmall?.color ??
+                  Colors.black,
             ),
             textAlign: TextAlign.center,
           ),
@@ -57,7 +67,7 @@ class StationDetails extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 400), // Adjust maxWidth as needed
+              constraints: BoxConstraints(maxWidth: 400),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: station.chargingPorts.map((port) {
@@ -67,7 +77,9 @@ class StationDetails extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(vertical: 4),
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: brightness == Brightness.dark ? Colors.grey[700] : Colors.grey[200],
+                          color: brightness == Brightness.dark
+                              ? Colors.grey[700]
+                              : Colors.grey[200],
                           borderRadius: BorderRadius.circular(8),
                           boxShadow: const [
                             BoxShadow(
@@ -89,14 +101,27 @@ class StationDetails extends StatelessWidget {
                             'Status: ${port.status}',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme.of(context).textTheme.headlineSmall?.color ?? Colors.black54,
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.color ??
+                                  Colors.black54,
                             ),
                           ),
                           trailing: port.status == "AVAILABLE"
-                              ? CreateButtonWidget(
-                            stationIdentifier: station.stationIdentifier,
-                            portIdentifier: port.portIdentifier,
-                          )
+                              ? CreateSessionWidget(
+                                  stationIdentifier: station.stationIdentifier,
+                                  portIdentifier: port.portIdentifier,
+                                  onSessionCreated: () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => StationManagement(
+                                              token: token,
+                                              sessionFacade: sessionFacade)),
+                                    );
+                                  },
+                                )
                               : null,
                         ),
                       ),

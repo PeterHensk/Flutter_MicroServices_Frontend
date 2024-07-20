@@ -5,6 +5,7 @@ import 'package:frontend/models/Dto/GetAllUsersDto.dart';
 import 'package:frontend/models/Dto/UpdateUserDto.dart';
 import 'package:http/http.dart' as http;
 
+import '../../models/Dto/CreateCarDto.dart';
 import '../../models/Dto/GetAllSessionsDto.dart';
 import '../../models/Dto/RunningSessionDto.dart';
 import '../../models/Dto/StartSessionDto.dart';
@@ -33,9 +34,7 @@ class SessionService {
     );
     if (response.statusCode == 200) {
       return PageResponse<GetAllUsersDto>.fromJson(
-          jsonDecode(response.body),
-              (item) => GetAllUsersDto.fromJson(item)
-      );
+          jsonDecode(response.body), (item) => GetAllUsersDto.fromJson(item));
     } else {
       throw Exception('Failed to load users');
     }
@@ -53,7 +52,8 @@ class SessionService {
     );
   }
 
-  Future<http.Response> updateUserField(GetAllUsersDto user, String field, String value) {
+  Future<http.Response> updateUserField(
+      GetAllUsersDto user, String field, String value) {
     UpdateUserDto updatedUser = UpdateUserDto(
       id: user.id,
       email: field == 'email' ? value : user.email,
@@ -65,7 +65,8 @@ class SessionService {
     return updateUser(updatedUser.id, updatedUser);
   }
 
-  Future<PageResponse<GetAllSessionsDto>> getAllSessions(int page, int size) async {
+  Future<PageResponse<GetAllSessionsDto>> getAllSessions(
+      int page, int size) async {
     final response = await http.get(
       Uri.parse('$_baseUrl/session?page=$page&size=$size'),
       headers: {
@@ -73,10 +74,8 @@ class SessionService {
       },
     );
     if (response.statusCode == 200) {
-      return PageResponse<GetAllSessionsDto>.fromJson(
-          jsonDecode(response.body),
-              (item) => GetAllSessionsDto.fromJson(item)
-      );
+      return PageResponse<GetAllSessionsDto>.fromJson(jsonDecode(response.body),
+          (item) => GetAllSessionsDto.fromJson(item));
     } else {
       throw Exception('Failed to load sessions');
     }
@@ -93,7 +92,8 @@ class SessionService {
     return response;
   }
 
-  Future<http.Response> startSession(String token, StartSessionDto sessionDto) async {
+  Future<http.Response> startSession(
+      String token, StartSessionDto sessionDto) async {
     final url = Uri.parse('$_baseUrl/session/start');
     final response = await http.post(
       url,
@@ -104,6 +104,20 @@ class SessionService {
       body: jsonEncode(sessionDto.toJson()),
     );
     return response;
+  }
+
+  Future<void> stopSession(String token, int sessionId) async {
+    final url = Uri.parse('$_baseUrl/session/stop/$sessionId');
+    final response = await http.put(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to stop session');
+    }
   }
 
   Future<RunningSessionDto?> getRunningSession(String token) async {
@@ -125,4 +139,16 @@ class SessionService {
     }
   }
 
+  Future<http.Response> createCar(String token, CreateCarDto carDto) async {
+    final url = Uri.parse('$_baseUrl/car');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(carDto.toJson()),
+    );
+    return response;
+  }
 }
