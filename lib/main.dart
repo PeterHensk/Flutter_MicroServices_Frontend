@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:frontend/data-access/services/MaintenanceService.dart';
 import 'package:frontend/models/Dto/UserDto.dart';
 import 'package:frontend/screens/HomePage.dart';
 import 'package:frontend/screens/SignInPage.dart';
@@ -14,6 +15,7 @@ import 'package:frontend/data-access/services/SessionService.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
+import 'data-access/facades/MaintenanceFacade.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -21,10 +23,11 @@ void main() async {
   await dotenv.load(fileName: ".env");
   await _initializeApp();
   final sessionFacade = SessionFacade(SessionService());
+  final maintenanceFacade = MaintenanceFacade(MaintenanceService());
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeNotifier(),
-      child: MyApp(sessionFacade: sessionFacade),
+      child: MyApp(sessionFacade: sessionFacade, maintenanceFacade: maintenanceFacade,),
     ),
   );
 }
@@ -42,8 +45,11 @@ Future<void> _initializeApp() async {
 class MyApp extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final SessionFacade sessionFacade;
+  final MaintenanceFacade maintenanceFacade;
 
-  MyApp({super.key, required this.sessionFacade});
+  MyApp({super.key,
+         required this.sessionFacade,
+         required this.maintenanceFacade});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +72,7 @@ class MyApp extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.active) {
               User? user = snapshot.data;
               if (user == null) {
-                return SignInPage(sessionFacade: sessionFacade,);
+                return SignInPage(sessionFacade: sessionFacade, maintenanceFacade: maintenanceFacade,);
               } else {
                 return FutureBuilder<String?>(
                   future: user.getIdToken(),
@@ -94,7 +100,8 @@ class MyApp extends StatelessWidget {
                                         return HomePage(
                                           firstName: data.firstName,
                                           lastName: data.lastName,
-                                          sessionFacade: sessionFacade
+                                          sessionFacade: sessionFacade,
+                                          maintenanceFacade: maintenanceFacade,
                                         );
                                       } catch (e) {
                                         return Center(child: Text('Failed to parse user data: $e'));
@@ -144,7 +151,8 @@ class MyApp extends StatelessWidget {
                 builder: (context) => HomePage(
                   firstName: firstName ?? 'FirstName',
                   lastName: lastName ?? 'LastName',
-                  sessionFacade: sessionFacade
+                  sessionFacade: sessionFacade,
+                  maintenanceFacade: maintenanceFacade
                 ),
               );
             }

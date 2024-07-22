@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/Dto/GetAllUsersDto.dart';
+import '../data-access/facades/MaintenanceFacade.dart';
 import '../data-access/facades/PageResponse.dart';
 import '../data-access/facades/SessionFacade.dart';
 import '../data-access/services/SessionService.dart';
@@ -8,8 +9,9 @@ import '../widgets/session/UserManagementList.dart';
 
 class UserManagement extends StatefulWidget {
   final SessionFacade sessionFacade;
+  final MaintenanceFacade maintenanceFacade;
 
-  const UserManagement({super.key, required this.sessionFacade});
+  const UserManagement({super.key, required this.sessionFacade, required this.maintenanceFacade});
   @override
   _UserManagementState createState() => _UserManagementState();
 }
@@ -64,7 +66,7 @@ class _UserManagementState extends State<UserManagement> {
       appBar: AppBar(
         title: Text('User Management'),
       ),
-      drawer: NavBar(sessionFacade: widget.sessionFacade,),
+      drawer: NavBar(sessionFacade: widget.sessionFacade, maintenanceFacade: widget.maintenanceFacade),
       body: UserManagementList(
         futurePageResponse: _futurePageResponse,
         currentPage: _currentPage,

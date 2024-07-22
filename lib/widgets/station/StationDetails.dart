@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../data-access/facades/MaintenanceFacade.dart';
 import '../../data-access/facades/SessionFacade.dart';
 import '../../models/Dto/GetAllStationsDto.dart';
 import '../../screens/StationManagement.dart';
@@ -8,10 +9,12 @@ class StationDetails extends StatelessWidget {
   final GetAllStationsDto station;
   final String token;
   final SessionFacade sessionFacade;
+  final MaintenanceFacade maintenanceFacade;
 
   const StationDetails({super.key, required this.station,
                                    required this.token,
-                                   required this.sessionFacade});
+                                   required this.sessionFacade,
+                                   required this.maintenanceFacade});
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +121,8 @@ class StationDetails extends StatelessWidget {
                                       MaterialPageRoute(
                                           builder: (context) => StationManagement(
                                               token: token,
-                                              sessionFacade: sessionFacade)),
+                                              sessionFacade: sessionFacade,
+                                              maintenanceFacade: maintenanceFacade)),
                                     );
                                   },
                                 )

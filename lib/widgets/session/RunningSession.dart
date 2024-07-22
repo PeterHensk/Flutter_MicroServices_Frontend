@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../data-access/facades/MaintenanceFacade.dart';
 import '../../data-access/facades/SessionFacade.dart';
 import '../../models/Dto/RunningSessionDto.dart';
 import '../../screens/HomePage.dart';
@@ -10,6 +11,7 @@ class RunningSession extends StatelessWidget {
   final String firstName;
   final String lastName;
   final SessionFacade sessionFacade;
+  final MaintenanceFacade maintenanceFacade;
 
   const RunningSession({
     super.key,
@@ -18,6 +20,7 @@ class RunningSession extends StatelessWidget {
     this.session,
     required this.firstName,
     required this.lastName,
+    required this.maintenanceFacade,
   });
 
   @override
@@ -68,6 +71,7 @@ class RunningSession extends StatelessWidget {
                 MaterialPageRoute(
                     builder: (context) => HomePage(
                           sessionFacade: sessionFacade,
+                          maintenanceFacade: maintenanceFacade,
                           firstName: firstName,
                           lastName: lastName,
                         )),

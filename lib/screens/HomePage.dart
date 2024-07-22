@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../data-access/facades/MaintenanceFacade.dart';
 import '../data-access/facades/SessionFacade.dart';
 import '../widgets/general/NavBar.dart';
 
@@ -6,11 +7,13 @@ class HomePage extends StatelessWidget {
   final String firstName;
   final String lastName;
   final SessionFacade sessionFacade;
+  final MaintenanceFacade maintenanceFacade;
 
   HomePage({
     required this.firstName,
     required this.lastName,
-    required this.sessionFacade});
+    required this.sessionFacade,
+    required this.maintenanceFacade});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,7 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      drawer: NavBar(sessionFacade: sessionFacade),
+      drawer: NavBar(sessionFacade: sessionFacade, maintenanceFacade: maintenanceFacade),
       body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

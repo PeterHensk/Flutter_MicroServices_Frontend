@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../data-access/facades/MaintenanceFacade.dart';
 import '../data-access/facades/SessionFacade.dart';
 import '../widgets/session/SessionList.dart';
 import '../widgets/general/NavBar.dart';
@@ -6,9 +7,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SessionPage extends StatefulWidget {
   final SessionFacade sessionFacade;
+  final MaintenanceFacade maintenanceFacade;
 
   const SessionPage({super.key,
-    required this.sessionFacade});
+    required this.sessionFacade,
+    required this.maintenanceFacade});
 
   @override
   _SessionPageState createState() {
@@ -23,7 +26,7 @@ class _SessionPageState extends State<SessionPage> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.session_screen_title),
       ),
-      drawer: NavBar(sessionFacade: widget.sessionFacade),
+      drawer: NavBar(sessionFacade: widget.sessionFacade, maintenanceFacade: widget.maintenanceFacade),
       body: Column(
         children: [
           Padding(

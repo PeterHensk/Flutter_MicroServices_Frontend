@@ -1,5 +1,3 @@
-
-
 import '../chargingPort.dart';
 import '../location.dart';
 import '../station.dart';

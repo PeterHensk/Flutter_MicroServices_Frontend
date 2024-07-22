@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/Dto/GetAllStationsDto.dart';
+import '../data-access/facades/MaintenanceFacade.dart';
 import '../data-access/facades/PageResponse.dart';
 import '../data-access/facades/SessionFacade.dart';
 import '../data-access/facades/StationFacade.dart';
@@ -11,11 +12,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StationManagement extends StatefulWidget {
   final SessionFacade sessionFacade;
+  final MaintenanceFacade maintenanceFacade;
   final String token;
 
   const StationManagement({super.key,
                            required this.sessionFacade,
-                           required this.token});
+                           required this.token,
+                           required this.maintenanceFacade});
 
   @override
   _StationManagementState createState() {
@@ -63,7 +66,7 @@ class _StationManagementState extends State<StationManagement> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.station_screen_title),
       ),
-      drawer: NavBar(sessionFacade: widget.sessionFacade,),
+      drawer: NavBar(sessionFacade: widget.sessionFacade, maintenanceFacade: widget.maintenanceFacade),
       body: Column(
         children: [
           Padding(
@@ -91,7 +94,11 @@ class _StationManagementState extends State<StationManagement> {
                         child: ListView.builder(
                           itemCount: stations.length,
                           itemBuilder: (context, index) {
-                            return StationTile(station: stations[index], token: widget.token, sessionFacade: widget.sessionFacade);
+                            return StationTile(
+                              station: stations[index],
+                              token: widget.token,
+                              sessionFacade: widget.sessionFacade,
+                              maintenanceFacade: widget.maintenanceFacade);
                           },
                         ),
                       ),

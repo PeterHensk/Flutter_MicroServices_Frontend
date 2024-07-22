@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:frontend/models/Dto/UserDto.dart';
+import '../../data-access/facades/MaintenanceFacade.dart';
 import '../../data-access/facades/SessionFacade.dart';
 import '../../data-access/services/SessionService.dart';
 import '../../screens/HomePage.dart';
@@ -12,8 +13,11 @@ import 'ErrorToast.dart';
 class SignInButton extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final SessionFacade sessionFacade;
+  final MaintenanceFacade maintenanceFacade;
 
-  SignInButton({super.key, required this.sessionFacade});
+  SignInButton({super.key,
+                required this.sessionFacade,
+                required this.maintenanceFacade});
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +41,7 @@ class SignInButton extends StatelessWidget {
                       firstName: data.firstName,
                       lastName: data.lastName,
                       sessionFacade: sessionFacade,
+                      maintenanceFacade: maintenanceFacade
                     ),
                   ));
             }
