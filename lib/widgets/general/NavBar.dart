@@ -41,35 +41,57 @@ class NavBar extends StatelessWidget {
             title: const Text('Users'),
             onTap: () async {
               await auth.signOut();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserManagement(sessionFacade: sessionFacade, maintenanceFacade: maintenanceFacade)));
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(
+                  builder: (context) => UserManagement(
+                      sessionFacade: sessionFacade,
+                      maintenanceFacade: maintenanceFacade)));
             },
           ),
           ListTile(
             title: const Text('Stations'),
             onTap: () async {
               await auth.signOut();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StationManagement(token: token, sessionFacade: sessionFacade, maintenanceFacade: maintenanceFacade)));
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(
+                  builder: (context) => StationManagement(
+                      token: token,
+                      sessionFacade: sessionFacade,
+                      maintenanceFacade: maintenanceFacade)));
             },
           ),
           ListTile(
             title: const Text('Session details'),
             onTap: () async {
               await auth.signOut();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SessionPage(sessionFacade: sessionFacade, maintenanceFacade: maintenanceFacade)));
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(
+                  builder: (context) => SessionPage(
+                      token: token,
+                      sessionFacade: sessionFacade,
+                      maintenanceFacade: maintenanceFacade)));
             },
           ),
           ListTile(
             title: const Text('Maintenance reports'),
             onTap: () async {
               await auth.signOut();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MaintenancePage(token: token, maintenanceFacade: maintenanceFacade,)));
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(
+                  builder: (context) => MaintenancePage(
+                    token: token, sessionFacade: sessionFacade,
+                    maintenanceFacade: maintenanceFacade,)));
             },
           ),
           ListTile(
             title: const Text('Log off'),
             onTap: () async {
               await auth.signOut();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInPage(sessionFacade: sessionFacade, maintenanceFacade: maintenanceFacade)));
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(
+                  builder: (context) => SignInPage(
+                      sessionFacade: sessionFacade,
+                      maintenanceFacade: maintenanceFacade)));
             },
           ),
           SwitchListTile(

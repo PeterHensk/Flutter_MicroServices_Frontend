@@ -66,11 +66,12 @@ class SessionService {
   }
 
   Future<PageResponse<GetAllSessionsDto>> getAllSessions(
-      int page, int size) async {
+      String token, int page, int size) async {
     final response = await http.get(
       Uri.parse('$_baseUrl/session?page=$page&size=$size'),
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       },
     );
     if (response.statusCode == 200) {
@@ -81,12 +82,13 @@ class SessionService {
     }
   }
 
-  Future<http.Response> deleteSession(int sessionId) async {
+  Future<http.Response> deleteSession(String token, int sessionId) async {
     final url = Uri.parse('$_baseUrl/session/$sessionId');
     final response = await http.delete(
       url,
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       },
     );
     return response;

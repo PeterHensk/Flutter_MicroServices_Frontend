@@ -25,18 +25,18 @@ class SessionFacade {
   }
 
   Future<PageResponse<GetAllSessionsDto>> getAllSessions(
-      int pageIndex, int pageSize) async {
+      String token, int pageIndex, int pageSize) async {
     try {
       final PageResponse<GetAllSessionsDto> response =
-          await _sessionService.getAllSessions(pageIndex, pageSize);
+          await _sessionService.getAllSessions(token, pageIndex, pageSize);
       return response;
     } catch (error) {
       throw Exception('Failed to fetch sessions: $error');
     }
   }
 
-  Future<void> deleteSession(int sessionId) async {
-    final response = await _sessionService.deleteSession(sessionId);
+  Future<void> deleteSession(String token, int sessionId) async {
+    final response = await _sessionService.deleteSession(token, sessionId);
     if (response.statusCode != 200 && response.statusCode != 204) {
       throw Exception('Failed to delete session');
     }

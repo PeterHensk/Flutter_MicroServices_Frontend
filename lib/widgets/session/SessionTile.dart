@@ -8,12 +8,16 @@ import '../general/ConfirmDeleteDialog.dart';
 import '../general/HoverMenuWidget.dart';
 import '../general/PaginationWidget.dart';
 
-class SessionList extends StatefulWidget {
+class SessionTile extends StatefulWidget {
+  final String token;
+
+  const SessionTile({super.key, required this.token});
+
   @override
-  _SessionListState createState() => _SessionListState();
+  _SessionTileState createState() => _SessionTileState();
 }
 
-class _SessionListState extends State<SessionList> {
+class _SessionTileState extends State<SessionTile> {
   final SessionFacade _sessionFacade = SessionFacade(SessionService());
   Future<PageResponse<GetAllSessionsDto>>? _futureSessions;
   int _currentPage = 0;
@@ -28,7 +32,7 @@ class _SessionListState extends State<SessionList> {
 
   void _loadSessions() async {
     setState(() {
-      _futureSessions = _sessionFacade.getAllSessions(_currentPage, _pageSize);
+      _futureSessions = _sessionFacade.getAllSessions(widget.token, _currentPage, _pageSize);
     });
     _futureSessions!.then((pageResponse) {
       setState(() {
@@ -39,7 +43,7 @@ class _SessionListState extends State<SessionList> {
 
   void _deleteSession(int sessionId) async {
     try {
-      await _sessionFacade.deleteSession(sessionId);
+      await _sessionFacade.deleteSession(widget.token, sessionId);
       print("Session with ID: $sessionId deleted successfully");
     } catch (e) {
       print("Failed to delete session with ID: $sessionId. Error: $e");
@@ -94,11 +98,12 @@ class _SessionListState extends State<SessionList> {
                       final endedFormatted = dateFormat.format(DateTime.parse(session.ended));
 
                       return Center( // Center the ListTile
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.8, // Set a fixed width for centering
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
                           child: ListTile(
                             title: Center(child: Text(session.stationIdentifier)),
                             subtitle: HoverMenuWidget(
+                              actions: const [HoverMenuAction.edit, HoverMenuAction.delete],
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [

@@ -1,26 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/data-access/services/MaintenanceService.dart';
 import '../data-access/facades/MaintenanceFacade.dart';
+import '../data-access/facades/SessionFacade.dart';
 import '../models/Dto/GetAllMaintenanceDto.dart';
 import '../data-access/facades/PageResponse.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../widgets/general/NavBar.dart';
 import '../widgets/general/PaginationWidget.dart';
 import '../widgets/maintenance/MaintenanceTile.dart';
 
 class MaintenancePage extends StatefulWidget {
   final String token;
+  final SessionFacade sessionFacade;
   final MaintenanceFacade maintenanceFacade;
 
-  const MaintenancePage({super.key,
-                         required this.token,
-                         required this.maintenanceFacade});
+  static final maintenancePageKey = GlobalKey<MaintenancePageState>();
+
+  MaintenancePage({
+    required this.token,
+    required this.maintenanceFacade,
+    required this.sessionFacade,
+    Key? key,
+  }) : super(key: maintenancePageKey);
 
   @override
-  _MaintenancePageState createState() => _MaintenancePageState();
+  MaintenancePageState createState() => MaintenancePageState();
 }
 
-class _MaintenancePageState extends State<MaintenancePage> {
+class MaintenancePageState extends State<MaintenancePage> {
   final MaintenanceFacade _maintenanceFacade = MaintenanceFacade(MaintenanceService());
   int _currentPage = 0;
   final int _pageSize = 5;
@@ -60,6 +68,7 @@ class _MaintenancePageState extends State<MaintenancePage> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.maintenance_screen_title),
       ),
+      drawer: NavBar(sessionFacade: widget.sessionFacade, maintenanceFacade: widget.maintenanceFacade),
       body: Column(
         children: [
           Padding(
@@ -90,7 +99,9 @@ class _MaintenancePageState extends State<MaintenancePage> {
                             return MaintenanceTile(
                                 maintenanceReport: reports[index],
                                 token: widget.token,
-                                maintenanceFacade: widget.maintenanceFacade);
+                                maintenanceFacade: widget.maintenanceFacade,
+                                onMaintenanceDeleted: _loadMaintenanceReports,
+                              );
                           },
                         ),
                       ),

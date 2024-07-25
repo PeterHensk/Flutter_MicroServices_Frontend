@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import '../data-access/facades/MaintenanceFacade.dart';
 import '../data-access/facades/SessionFacade.dart';
-import '../widgets/session/SessionList.dart';
+import '../widgets/session/SessionTile.dart';
 import '../widgets/general/NavBar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SessionPage extends StatefulWidget {
   final SessionFacade sessionFacade;
   final MaintenanceFacade maintenanceFacade;
+  final String token;
 
   const SessionPage({super.key,
     required this.sessionFacade,
-    required this.maintenanceFacade});
+    required this.maintenanceFacade,
+    required this.token});
 
   @override
   _SessionPageState createState() {
@@ -45,7 +47,7 @@ class _SessionPageState extends State<SessionPage> {
             ),
           ),
           Expanded(
-            child: SessionList(),
+            child: SessionTile(token: widget.token),
           ),
         ],
       ),

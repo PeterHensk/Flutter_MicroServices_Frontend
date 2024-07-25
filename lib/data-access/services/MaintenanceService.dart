@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../../models/Dto/CreateMaintenanceDto.dart';
 import '../../models/Dto/GetAllMaintenanceDto.dart';
+import '../../models/Dto/UpdateMaintenanceDto.dart';
 import '../facades/PageResponse.dart';
 
 class MaintenanceService {
@@ -26,4 +28,48 @@ class MaintenanceService {
       throw Exception('Failed to load maintenance reports');
     }
   }
+  Future<void> createMaintenanceReport(String token, CreateMaintenanceDto dto) async {
+    final url = Uri.parse(_baseUrl);
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(dto.toJson()),
+    );
+
+    if (response.statusCode != 201) {
+      throw Exception('Failed to create maintenance report');
+    }
+  }
+
+  Future<void> updateMaintenanceReport(String token, int reportId, UpdateMaintenanceDto dto) async {
+    final url = Uri.parse('$_baseUrl/$reportId');
+    final response = await http.put(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(dto.toJson()),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update maintenance report');
+    }
+  }
+
+  Future<http.Response> deleteMaintenance(String token, int maintenanceId) async {
+    final url = Uri.parse('$_baseUrl/$maintenanceId');
+    final response = await http.delete(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    return response;
+  }
+
 }
