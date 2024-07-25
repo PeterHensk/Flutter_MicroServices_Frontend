@@ -8,13 +8,15 @@ class CreateCarDialog extends StatefulWidget {
   final String token;
   final String licensePlate;
   final StartSessionDto sessionDto;
+  final VoidCallback onSessionCreated;
 
   const CreateCarDialog({
-    Key? key,
+    super.key,
     required this.token,
     required this.licensePlate,
     required this.sessionDto,
-  }) : super(key: key);
+    required this.onSessionCreated,
+  });
 
   @override
   _CreateCarDialogState createState() => _CreateCarDialogState();
@@ -27,27 +29,27 @@ class _CreateCarDialogState extends State<CreateCarDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Create Car'),
+      title: const Text('Create Car'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: _brandController,
-            decoration: InputDecoration(labelText: 'Car Brand'),
+            decoration: const InputDecoration(labelText: 'Car Brand'),
           ),
           TextField(
             controller: _modelController,
-            decoration: InputDecoration(labelText: 'Car Model'),
+            decoration: const InputDecoration(labelText: 'Car Model'),
           ),
         ],
       ),
       actions: [
         TextButton(
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
           onPressed: () => Navigator.of(context).pop(),
         ),
         ElevatedButton(
-          child: Text('Create and Start Session'),
+          child: const Text('Create and Start Session'),
           onPressed: () async => _createCarAndStartSession(context),
         ),
       ],
@@ -66,13 +68,17 @@ class _CreateCarDialogState extends State<CreateCarDialog> {
       await sessionFacade.createCar(widget.token, carDto);
       await sessionFacade.startSession(widget.token, widget.sessionDto);
       Navigator.of(context).pop();
+      widget.onSessionCreated();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Car created and session started successfully!')),
+        const SnackBar(
+            content: Text('Car created and session started successfully!')),
       );
     } catch (error) {
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to create car or start session: ${error.toString()}')),
+        SnackBar(
+            content: Text(
+                'Failed to create car or start session: ${error.toString()}')),
       );
     }
   }

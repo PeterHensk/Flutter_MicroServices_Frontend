@@ -5,9 +5,7 @@ import '../../models/Dto/RunningSessionDto.dart';
 import '../../screens/SignInPage.dart';
 import '../../screens/SessionPage.dart';
 import '../../screens/MaintenancePage.dart';
-
 import '../../screens/StationManagement.dart';
-import '../../screens/UserManagement.dart';
 import '../../services/authentication.dart';
 import '../../data-access/facades/SessionFacade.dart';
 import '../session/RunningSession.dart';
@@ -18,7 +16,10 @@ class NavBar extends StatelessWidget {
   final SessionFacade sessionFacade;
   final MaintenanceFacade maintenanceFacade;
 
-  NavBar({super.key, required this.sessionFacade, required this.maintenanceFacade});
+  NavBar(
+      {super.key,
+      required this.sessionFacade,
+      required this.maintenanceFacade});
 
   @override
   Widget build(BuildContext context) {
@@ -38,26 +39,16 @@ class NavBar extends StatelessWidget {
             child: Text('Navigation'),
           ),
           ListTile(
-            title: const Text('Users'),
-            onTap: () async {
-              await auth.signOut();
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(
-                  builder: (context) => UserManagement(
-                      sessionFacade: sessionFacade,
-                      maintenanceFacade: maintenanceFacade)));
-            },
-          ),
-          ListTile(
             title: const Text('Stations'),
             onTap: () async {
               await auth.signOut();
               Navigator.pushReplacement(
-                  context, MaterialPageRoute(
-                  builder: (context) => StationManagement(
-                      token: token,
-                      sessionFacade: sessionFacade,
-                      maintenanceFacade: maintenanceFacade)));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => StationManagement(
+                          token: token,
+                          sessionFacade: sessionFacade,
+                          maintenanceFacade: maintenanceFacade)));
             },
           ),
           ListTile(
@@ -65,11 +56,12 @@ class NavBar extends StatelessWidget {
             onTap: () async {
               await auth.signOut();
               Navigator.pushReplacement(
-                  context, MaterialPageRoute(
-                  builder: (context) => SessionPage(
-                      token: token,
-                      sessionFacade: sessionFacade,
-                      maintenanceFacade: maintenanceFacade)));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SessionPage(
+                          token: token,
+                          sessionFacade: sessionFacade,
+                          maintenanceFacade: maintenanceFacade)));
             },
           ),
           ListTile(
@@ -77,10 +69,13 @@ class NavBar extends StatelessWidget {
             onTap: () async {
               await auth.signOut();
               Navigator.pushReplacement(
-                  context, MaterialPageRoute(
-                  builder: (context) => MaintenancePage(
-                    token: token, sessionFacade: sessionFacade,
-                    maintenanceFacade: maintenanceFacade,)));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MaintenancePage(
+                            token: token,
+                            sessionFacade: sessionFacade,
+                            maintenanceFacade: maintenanceFacade,
+                          )));
             },
           ),
           ListTile(
@@ -88,10 +83,11 @@ class NavBar extends StatelessWidget {
             onTap: () async {
               await auth.signOut();
               Navigator.pushReplacement(
-                  context, MaterialPageRoute(
-                  builder: (context) => SignInPage(
-                      sessionFacade: sessionFacade,
-                      maintenanceFacade: maintenanceFacade)));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SignInPage(
+                          sessionFacade: sessionFacade,
+                          maintenanceFacade: maintenanceFacade)));
             },
           ),
           SwitchListTile(
@@ -109,12 +105,13 @@ class NavBar extends StatelessWidget {
               } else if (snapshot.hasError) {
                 return const ListTile(title: Text('Error fetching session'));
               } else {
-                return RunningSession(session: snapshot.data,
-                                      sessionFacade: sessionFacade,
-                                      token: token,
-                                      firstName: firstName,
-                                      lastName: lastName,
-                                      maintenanceFacade: maintenanceFacade);
+                return RunningSession(
+                    session: snapshot.data,
+                    sessionFacade: sessionFacade,
+                    token: token,
+                    firstName: firstName,
+                    lastName: lastName,
+                    maintenanceFacade: maintenanceFacade);
               }
             },
           ),

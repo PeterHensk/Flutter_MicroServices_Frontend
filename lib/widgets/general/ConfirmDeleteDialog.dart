@@ -6,11 +6,11 @@ class ConfirmDeleteDialog extends StatelessWidget {
   final VoidCallback onConfirm;
 
   const ConfirmDeleteDialog({
-    Key? key,
+    super.key,
     this.title = 'Delete',
     this.content = 'Are you sure you want to delete this?',
     required this.onConfirm,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +19,13 @@ class ConfirmDeleteDialog extends StatelessWidget {
       content: Text(content),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.of(context).pop(), // Close the dialog
+          onPressed: () => Navigator.of(context).pop(),
           child: const Text('No'),
         ),
         TextButton(
           onPressed: () {
             onConfirm();
-            Navigator.of(context).pop(); // Close the dialog after confirming
+            Navigator.of(context).pop();
           },
           child: const Text('Yes'),
         ),

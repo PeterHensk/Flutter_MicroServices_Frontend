@@ -7,7 +7,7 @@ import '../../models/Dto/UpdateMaintenanceDto.dart';
 import '../facades/PageResponse.dart';
 
 class MaintenanceService {
-  static const String _baseUrl = 'http://localhost:8083/maintenance';
+  static const String _baseUrl = 'http://localhost:8080/maintenance';
 
   Future<PageResponse<GetAllMaintenanceDto>> getMaintenanceReports(String token, int page, int size, {String sort = 'creationDate,desc'}) async {
     final url = Uri.parse('$_baseUrl/report?page=$page&size=$size&sort=$sort');

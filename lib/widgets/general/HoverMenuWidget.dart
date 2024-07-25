@@ -9,7 +9,8 @@ class HoverMenuWidget extends StatefulWidget {
   final VoidCallback? onReport;
   final List<HoverMenuAction> actions;
 
-  HoverMenuWidget({
+  const HoverMenuWidget({
+    super.key,
     required this.child,
     this.onEdit,
     this.onDelete,
@@ -74,7 +75,9 @@ class _HoverMenuWidgetState extends State<HoverMenuWidget> {
               child: Card(
                 elevation: 4,
                 child: Row(
-                  children: widget.actions.map((action) => _buildActionButton(action)).toList(),
+                  children: widget.actions
+                      .map((action) => _buildActionButton(action))
+                      .toList(),
                 ),
               ),
             ),

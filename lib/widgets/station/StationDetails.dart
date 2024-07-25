@@ -3,7 +3,7 @@ import '../../data-access/facades/MaintenanceFacade.dart';
 import '../../data-access/facades/SessionFacade.dart';
 import '../../models/Dto/GetAllStationsDto.dart';
 import '../../screens/StationManagement.dart';
-import 'CreateSessionWidget.dart';
+import '../session/CreateSessionWidget.dart';
 
 class StationDetails extends StatelessWidget {
   final GetAllStationsDto station;
@@ -11,10 +11,12 @@ class StationDetails extends StatelessWidget {
   final SessionFacade sessionFacade;
   final MaintenanceFacade maintenanceFacade;
 
-  const StationDetails({super.key, required this.station,
-                                   required this.token,
-                                   required this.sessionFacade,
-                                   required this.maintenanceFacade});
+  const StationDetails(
+      {super.key,
+      required this.station,
+      required this.token,
+      required this.sessionFacade,
+      required this.maintenanceFacade});
 
   @override
   Widget build(BuildContext context) {
@@ -119,10 +121,12 @@ class StationDetails extends StatelessWidget {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => StationManagement(
-                                              token: token,
-                                              sessionFacade: sessionFacade,
-                                              maintenanceFacade: maintenanceFacade)),
+                                          builder: (context) =>
+                                              StationManagement(
+                                                  token: token,
+                                                  sessionFacade: sessionFacade,
+                                                  maintenanceFacade:
+                                                      maintenanceFacade)),
                                     );
                                   },
                                 )

@@ -12,10 +12,12 @@ class StationTile extends StatelessWidget {
   final SessionFacade sessionFacade;
   final MaintenanceFacade maintenanceFacade;
 
-  const StationTile({super.key, required this.station,
-    required this.token,
-    required this.sessionFacade,
-    required this.maintenanceFacade});
+  const StationTile(
+      {super.key,
+      required this.station,
+      required this.token,
+      required this.sessionFacade,
+      required this.maintenanceFacade});
 
   void editStation() {
     print("Edit station ${station.stationIdentifier}");
@@ -44,7 +46,11 @@ class StationTile extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.8,
       child: ListTile(
         title: HoverMenuWidget(
-          actions: const [HoverMenuAction.edit, HoverMenuAction.report, HoverMenuAction.delete],
+          actions: const [
+            HoverMenuAction.edit,
+            HoverMenuAction.report,
+            HoverMenuAction.delete
+          ],
           onEdit: editStation,
           onDelete: deleteStation,
           onReport: () => reportStation(context),
@@ -55,7 +61,8 @@ class StationTile extends StatelessWidget {
                   station.stationIdentifier,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Text('Location: ${station.location.city}, ${station.location.country}'),
+                Text(
+                    'Location: ${station.location.city}, ${station.location.country}'),
                 Text('Charging Ports: ${station.chargingPorts.length}'),
               ],
             ),

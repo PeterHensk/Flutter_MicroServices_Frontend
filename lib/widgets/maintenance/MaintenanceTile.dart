@@ -14,12 +14,12 @@ class MaintenanceTile extends StatelessWidget {
   final VoidCallback onMaintenanceDeleted;
 
   const MaintenanceTile({
-    Key? key,
+    super.key,
     required this.maintenanceReport,
     required this.token,
     required this.maintenanceFacade,
     required this.onMaintenanceDeleted,
-  }) : super(key: key);
+  });
 
   void deleteReport(BuildContext context, int reportId) async {
     showDialog(
@@ -30,9 +30,11 @@ class MaintenanceTile extends StatelessWidget {
             try {
               await maintenanceFacade.deleteReport(token, reportId);
               onMaintenanceDeleted();
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Maintenance report deleted successfully')));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Maintenance report deleted successfully')));
             } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to delete maintenance report: $e')));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Failed to delete maintenance report: $e')));
             }
           },
         );
@@ -68,8 +70,10 @@ class MaintenanceTile extends StatelessWidget {
               const SizedBox(height: 4),
               Text('Category: ${maintenanceReport.issueCategory}'),
               Text('Status: ${maintenanceReport.status}'),
-              Text('Report Date: ${dateFormat.format(maintenanceReport.creationDate)}'),
-              Text('Maintenance date: ${dateFormat.format(maintenanceReport.maintenanceDate)}'),
+              Text(
+                  'Report Date: ${dateFormat.format(maintenanceReport.creationDate)}'),
+              Text(
+                  'Maintenance date: ${dateFormat.format(maintenanceReport.maintenanceDate)}'),
               Text('Station: ${maintenanceReport.stationIdentifier}'),
             ],
           ),

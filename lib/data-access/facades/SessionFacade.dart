@@ -2,7 +2,6 @@ import 'package:http/http.dart';
 
 import '../../models/Dto/CreateCarDto.dart';
 import '../../models/Dto/GetAllSessionsDto.dart';
-import '../../models/Dto/GetAllUsersDto.dart';
 import '../../models/Dto/RunningSessionDto.dart';
 import '../../models/Dto/StartSessionDto.dart';
 import '../services/SessionService.dart';
@@ -12,17 +11,6 @@ class SessionFacade {
   final SessionService _sessionService;
 
   SessionFacade(this._sessionService);
-
-  Future<PageResponse<GetAllUsersDto>> getAllUsers(
-      int pageIndex, int pageSize) async {
-    try {
-      final PageResponse<GetAllUsersDto> response =
-          await _sessionService.getAllUsers(pageIndex, pageSize);
-      return response;
-    } catch (error) {
-      throw Exception('Failed to fetch users: $error');
-    }
-  }
 
   Future<PageResponse<GetAllSessionsDto>> getAllSessions(
       String token, int pageIndex, int pageSize) async {

@@ -8,16 +8,16 @@ import '../../data-access/facades/MaintenanceFacade.dart';
 import '../../data-access/facades/SessionFacade.dart';
 import '../../data-access/services/SessionService.dart';
 import '../../screens/HomePage.dart';
-import 'ErrorToast.dart';
 
 class SignInButton extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final SessionFacade sessionFacade;
   final MaintenanceFacade maintenanceFacade;
 
-  SignInButton({super.key,
-                required this.sessionFacade,
-                required this.maintenanceFacade});
+  SignInButton(
+      {super.key,
+      required this.sessionFacade,
+      required this.maintenanceFacade});
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +38,17 @@ class SignInButton extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => HomePage(
-                      firstName: data.firstName,
-                      lastName: data.lastName,
-                      sessionFacade: sessionFacade,
-                      maintenanceFacade: maintenanceFacade
-                    ),
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        sessionFacade: sessionFacade,
+                        maintenanceFacade: maintenanceFacade),
                   ));
             }
           }
         } catch (e) {
-          ErrorToast(message: "Error during sign-in: $e").show(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
         }
       },
     );

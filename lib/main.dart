@@ -6,8 +6,6 @@ import 'package:frontend/data-access/services/MaintenanceService.dart';
 import 'package:frontend/models/Dto/UserDto.dart';
 import 'package:frontend/screens/HomePage.dart';
 import 'package:frontend/screens/SignInPage.dart';
-import 'package:frontend/screens/StartSessionPage.dart';
-import 'package:frontend/widgets/general/ErrorToast.dart';
 import 'package:frontend/widgets/general/ThemeNotifier.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/data-access/facades/SessionFacade.dart';
@@ -63,7 +61,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter App',
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        theme: ThemeData.light(),
+        theme: themeNotifier.currentTheme,
         darkTheme: ThemeData.dark(),
         themeMode: themeNotifier.isDarkMode ? ThemeMode.dark : ThemeMode.light,
         home: StreamBuilder<User?>(
@@ -110,56 +108,29 @@ class MyApp extends StatelessWidget {
                                       return Center(child: Text('Failed to load user data: ${response.statusCode}'));
                                     }
                                   } else {
-                                    return Center(child: Text('No response from server'));
+                                    return const Center(child: Text('No response from server'));
                                   }
                                 }
                               } else {
-                                return Center(child: CircularProgressIndicator());
+                                return const Center(child: CircularProgressIndicator());
                               }
                             },
                           );
                         } else {
-                          return Center(child: CircularProgressIndicator());
+                          return const Center(child: CircularProgressIndicator());
                         }
                       }
                     } else {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
                   },
                 );
               }
             } else {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           },
         ),
-        onGenerateRoute: (settings) {
-          final token = themeNotifier.token;
-          final firstName = themeNotifier.firstName;
-          final lastName = themeNotifier.lastName;
-          if (settings.name == '/StartSessionPage') {
-            if (token != null) {
-              final sessionFacade = Provider.of<SessionFacade>(context, listen: false);
-              return MaterialPageRoute(
-                builder: (context) => StartSessionPage(sessionFacade: sessionFacade, token: token),
-              );
-            } else {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                ErrorToast(message: 'Token is missing').show(context);
-              });
-              return MaterialPageRoute(
-                builder: (context) => HomePage(
-                  firstName: firstName ?? 'FirstName',
-                  lastName: lastName ?? 'LastName',
-                  sessionFacade: sessionFacade,
-                  maintenanceFacade: maintenanceFacade
-                ),
-              );
-            }
-          }
-          // Handle other routes or return null
-          return null;
-        },
       ),
     );
   }

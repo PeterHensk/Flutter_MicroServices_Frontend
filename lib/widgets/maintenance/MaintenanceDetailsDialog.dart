@@ -12,11 +12,11 @@ class MaintenanceDetailsDialog extends StatefulWidget {
   final VoidCallback onEditSuccess;
 
   const MaintenanceDetailsDialog({
-    Key? key,
+    super.key,
     required this.maintenanceReport,
     required this.token,
     required this.onEditSuccess,
-  }) : super(key: key);
+  });
 
   @override
   _MaintenanceDetailsDialogState createState() =>
@@ -68,7 +68,8 @@ class _MaintenanceDetailsDialogState extends State<MaintenanceDetailsDialog> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  const Text('Station Identifier: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text('Station Identifier: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   Text(_stationIdentifierController.text),
                 ],
               ),
@@ -99,7 +100,7 @@ class _MaintenanceDetailsDialogState extends State<MaintenanceDetailsDialog> {
             ),
             DropdownButtonFormField<String>(
               value: _selectedStatus,
-              decoration: InputDecoration(labelText: 'Status'),
+              decoration: const InputDecoration(labelText: 'Status'),
               items: const [
                 DropdownMenuItem(value: "PENDING", child: Text("Pending")),
                 DropdownMenuItem(
@@ -129,18 +130,23 @@ class _MaintenanceDetailsDialogState extends State<MaintenanceDetailsDialog> {
             try {
               UpdateMaintenanceDto updateDto = UpdateMaintenanceDto(
                 issueDescription: _issueDescriptionController.text,
-                maintenanceDate: DateFormat('yyyy-MM-dd HH:mm').parse(_maintenanceDateController.text),
+                maintenanceDate: DateFormat('yyyy-MM-dd HH:mm')
+                    .parse(_maintenanceDateController.text),
                 issueCategory: _selectedIssueCategory!,
                 status: _selectedStatus!,
               );
               MaintenanceService maintenanceService = MaintenanceService();
-              MaintenanceFacade maintenanceFacade = MaintenanceFacade(maintenanceService);
-              await maintenanceFacade.updateMaintenanceReport(widget.token, widget.maintenanceReport.id, updateDto);
+              MaintenanceFacade maintenanceFacade =
+                  MaintenanceFacade(maintenanceService);
+              await maintenanceFacade.updateMaintenanceReport(
+                  widget.token, widget.maintenanceReport.id, updateDto);
               Navigator.of(context).pop();
               widget.onEditSuccess();
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Maintenance report updated successfully')));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Maintenance report updated successfully')));
             } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update maintenance report: $e')));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Failed to update maintenance report: $e')));
             }
           },
           child: const Text('Update'),

@@ -4,7 +4,7 @@ import 'package:frontend/models/Dto/GetAllStationsDto.dart';
 import 'package:http/http.dart' as http;
 
 class StationService {
-  static const String _baseUrl = 'http://localhost:8082/station';
+  static const String _baseUrl = 'http://localhost:8080/station';
 
   Future<PageResponse<GetAllStationsDto>> getAllStations(String token, int page, int size, {String sort = 'creationDate,desc'}) async {
     final response = await http.get(

@@ -8,17 +8,19 @@ class CreateMaintenanceReportDialog extends StatefulWidget {
   final MaintenanceFacade maintenanceFacade;
 
   const CreateMaintenanceReportDialog({
-    Key? key,
+    super.key,
     required this.stationIdentifier,
     required this.token,
     required this.maintenanceFacade,
-  }) : super(key: key);
+  });
 
   @override
-  _CreateMaintenanceReportDialogState createState() => _CreateMaintenanceReportDialogState();
+  _CreateMaintenanceReportDialogState createState() =>
+      _CreateMaintenanceReportDialogState();
 }
 
-class _CreateMaintenanceReportDialogState extends State<CreateMaintenanceReportDialog> {
+class _CreateMaintenanceReportDialogState
+    extends State<CreateMaintenanceReportDialog> {
   final _formKey = GlobalKey<FormState>();
   late String issueCategory;
   late String issueDescription;
@@ -42,7 +44,9 @@ class _CreateMaintenanceReportDialogState extends State<CreateMaintenanceReportD
         creationDate: creationDate,
         status: status,
       );
-      widget.maintenanceFacade.createMaintenanceReport(widget.token, dto).then((_) {
+      widget.maintenanceFacade
+          .createMaintenanceReport(widget.token, dto)
+          .then((_) {
         Navigator.of(context).pop();
       }).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -66,8 +70,10 @@ class _CreateMaintenanceReportDialogState extends State<CreateMaintenanceReportD
                 value: issueCategory,
                 decoration: const InputDecoration(labelText: 'Issue Category'),
                 items: const [
-                  DropdownMenuItem(value: "ELECTRICAL", child: Text("Electrical")),
-                  DropdownMenuItem(value: "MECHANICAL", child: Text("Mechanical")),
+                  DropdownMenuItem(
+                      value: "ELECTRICAL", child: Text("Electrical")),
+                  DropdownMenuItem(
+                      value: "MECHANICAL", child: Text("Mechanical")),
                   DropdownMenuItem(value: "SOFTWARE", child: Text("Software")),
                   DropdownMenuItem(value: "OTHER", child: Text("Other")),
                 ],
@@ -81,13 +87,17 @@ class _CreateMaintenanceReportDialogState extends State<CreateMaintenanceReportD
               ),
               DropdownButtonFormField<String>(
                 value: status,
-                decoration: InputDecoration(labelText: 'Status'),
+                decoration: const InputDecoration(labelText: 'Status'),
                 items: const [
                   DropdownMenuItem(value: "PENDING", child: Text("Pending")),
-                  DropdownMenuItem(value: "IN_PROGRESS", child: Text("In progress")),
-                  DropdownMenuItem(value: "COMPLETED", child: Text("Completed")),
-                  DropdownMenuItem(value: "CANCELLED", child: Text("Cancelled")),
-                  DropdownMenuItem(value: "REQUESTED", child: Text("Requested")),
+                  DropdownMenuItem(
+                      value: "IN_PROGRESS", child: Text("In progress")),
+                  DropdownMenuItem(
+                      value: "COMPLETED", child: Text("Completed")),
+                  DropdownMenuItem(
+                      value: "CANCELLED", child: Text("Cancelled")),
+                  DropdownMenuItem(
+                      value: "REQUESTED", child: Text("Requested")),
                 ],
                 onChanged: (value) => setState(() => status = value!),
                 validator: (value) {
@@ -98,7 +108,8 @@ class _CreateMaintenanceReportDialogState extends State<CreateMaintenanceReportD
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Issue Description'),
+                decoration:
+                    const InputDecoration(labelText: 'Issue Description'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter an issue description';

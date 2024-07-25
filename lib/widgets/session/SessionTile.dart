@@ -32,7 +32,8 @@ class _SessionTileState extends State<SessionTile> {
 
   void _loadSessions() async {
     setState(() {
-      _futureSessions = _sessionFacade.getAllSessions(widget.token, _currentPage, _pageSize);
+      _futureSessions =
+          _sessionFacade.getAllSessions(widget.token, _currentPage, _pageSize);
     });
     _futureSessions!.then((pageResponse) {
       setState(() {
@@ -94,47 +95,66 @@ class _SessionTileState extends State<SessionTile> {
                     itemBuilder: (context, index) {
                       final session = sessions[index];
                       final dateFormat = DateFormat('yyyy-MM-dd HH:mm');
-                      final startedFormatted = dateFormat.format(DateTime.parse(session.started));
-                      final endedFormatted = dateFormat.format(DateTime.parse(session.ended));
+                      final startedFormatted =
+                          dateFormat.format(DateTime.parse(session.started));
+                      final endedFormatted =
+                          dateFormat.format(DateTime.parse(session.ended));
 
-                      return Center( // Center the ListTile
+                      return Center(
+                        // Center the ListTile
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.8,
                           child: ListTile(
-                            title: Center(child: Text(session.stationIdentifier)),
+                            title:
+                                Center(child: Text(session.stationIdentifier)),
                             subtitle: HoverMenuWidget(
-                              actions: const [HoverMenuAction.edit, HoverMenuAction.delete],
+                              actions: const [
+                                HoverMenuAction.edit,
+                                HoverMenuAction.delete
+                              ],
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Center(
                                     child: RichText(
                                       text: TextSpan(
-                                        style: DefaultTextStyle.of(context).style,
+                                        style:
+                                            DefaultTextStyle.of(context).style,
                                         children: <TextSpan>[
-                                          const TextSpan(text: 'Start: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                          const TextSpan(
+                                              text: 'Start: ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
                                           TextSpan(text: '$startedFormatted '),
-                                          const TextSpan(text: 'Stop: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                          const TextSpan(
+                                              text: 'Stop: ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
                                           TextSpan(text: endedFormatted),
                                         ],
                                       ),
                                     ),
                                   ),
-                                  Center(child: Text('${session.car.licensePlate} - ${session.car.brand}')),
-                                  Center(child: Text('kWh charged: ${session.kwh.toStringAsFixed(2)}')),
+                                  Center(
+                                      child: Text(
+                                          '${session.car.licensePlate} - ${session.car.brand}')),
+                                  Center(
+                                      child: Text(
+                                          'kWh charged: ${session.kwh.toStringAsFixed(2)}')),
                                 ],
                               ),
                               onEdit: () => _editSession(session.id),
-                                onDelete: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return ConfirmDeleteDialog(
-                                        onConfirm: () => _deleteSession(session.id),
-                                      );
-                                    },
-                                  );
-                                },
+                              onDelete: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return ConfirmDeleteDialog(
+                                      onConfirm: () =>
+                                          _deleteSession(session.id),
+                                    );
+                                  },
+                                );
+                              },
                             ),
                           ),
                         ),
